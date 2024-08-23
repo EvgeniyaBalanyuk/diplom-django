@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "drf_spectacular",
+    "social_django",
     "shop",
     "cart",
     "orders",
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",
 ]
 
 ROOT_URLCONF = "myshop.urls"
@@ -132,3 +134,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # писать
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '8228531'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'KfAqQA9fweZJoTB1N7HZ'
+
+
+LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/auth/'

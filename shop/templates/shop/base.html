@@ -19,6 +19,8 @@
               {{ total_items }} item{{ total_items|pluralize }},
               ${{ cart.get_total_price }}
             </a>
+            <p></p>
+            <a href="{% url 'social:begin' 'vk-oauth2' %}">Войти через ВКонтакте</a>
           {% elif not order %}
             Your cart is empty.
           {% endif %}
