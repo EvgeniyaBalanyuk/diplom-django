@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill 
 
 
 class Category(models.Model):
@@ -38,6 +40,12 @@ class Product(models.Model):
     available = models.BooleanField(default=True)  # наличие или отсутствие товара
     created = models.DateTimeField(auto_now_add=True)  # дата и время создания объекта
     updated = models.DateTimeField(auto_now=True)  # дата и время обновления объекта
+
+    # Миниатюра, автоматически создаваемая ImageKit
+    thumbnail = ImageSpecField(source='image',
+                               processors=[ResizeToFill(100, 100)],
+                               format='JPEG',
+                               options={'quality': 60})
 
     class Meta:
         ordering = ['name']

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "social_django",
+    "imagekit",
     "shop",
     "cart",
     "orders",
@@ -151,3 +152,10 @@ SOCIAL_AUTH_VK_OAUTH2_SECRET = 'KfAqQA9fweZJoTB1N7HZ'
 
 
 LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/auth/'
+
+# Конфигурация для Celery
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Используем Redis в качестве брокера сообщений
+CELERY_ACCEPT_CONTENT = ['json']  # Формат сообщений Celery
+CELERY_TASK_SERIALIZER = 'json'   # Сериализация задач в формат JSON
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Хранение результатов также в Redis
+CELERY_TIMEZONE = 'UTC'  # Настройка временной зоны
