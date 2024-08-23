@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "drf_spectacular",
     "shop",
     "cart",
     "orders",
@@ -127,3 +128,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CART_SESSION_ID = 'cart'  # ключ для хранения корзины в пользовательском сеансе
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # писать электронные письма в консоль
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
