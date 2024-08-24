@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "jet",
+    "jet",  # Тюнинг админки
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,12 +41,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "drf_spectacular",
-    "social_django",
-    "imagekit",
-    "shop",
-    "cart",
-    "orders",
+    "drf_spectacular",  # Автогенерация документации Open API
+    "social_django",  # Авторизация с социальной сетью
+    "imagekit",  # Создание миниатюр картинок
+    "shop",  # Основное приложение магазина
+    "cart",  # Приложение для покупательской корзины
+    "orders",  # Приложение для оформления заказа
 ]
 
 MIDDLEWARE = [
@@ -142,6 +144,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+# Конфигурация для VK
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
@@ -149,8 +152,6 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '8228531'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'KfAqQA9fweZJoTB1N7HZ'
-
-
 LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/auth/'
 
 # Конфигурация для Celery
@@ -159,3 +160,12 @@ CELERY_ACCEPT_CONTENT = ['json']  # Формат сообщений Celery
 CELERY_TASK_SERIALIZER = 'json'   # Сериализация задач в формат JSON
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Хранение результатов также в Redis
 CELERY_TIMEZONE = 'UTC'  # Настройка временной зоны
+
+
+# Конфигурация для Sentry
+sentry_sdk.init(
+    dsn="https://061ceec07364da8c16fa6c740211c9fb@o4507830617440256.ingest.de.sentry.io/4507830621896784",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,  # Настройка уровня выборки событий для производительности (по умолчанию 1.0)
+    send_default_pii=True    # Опционально: отправлять личную идентифицируемую информацию (PII)
+)

@@ -21,15 +21,16 @@ from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 urlpatterns = [
-    path('jet/', include('jet.urls', 'jet')),
-    path("admin/", admin.site.urls),
-    path('cart/', include('cart.urls', namespace='cart')),
-    path('orders/', include('orders.urls', namespace='orders ')),
-    path('', include('shop.urls', namespace='shop')),
+    path('jet/', include('jet.urls', 'jet')),  # Тюнинг админки
+    path("admin/", admin.site.urls),  # Базовая админка
+    path('cart/', include('cart.urls', namespace='cart')),  # Приложение для покупательской корзины
+    path('orders/', include('orders.urls', namespace='orders ')),  # Приложение для оформления заказа
+    path('', include('shop.urls', namespace='shop')),  # Основное приложение магазина
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),  # Схема OpenAPI
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # Swagger UI
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),  # ReDoc UI
-    path('auth/', include('social_django.urls', namespace='social')),
+    path('auth/', include('social_django.urls', namespace='social')),  # авторизация с соц.сетью VK
+    path('sentry-test-exception/', include('shop.urls', namespace='sentry-test-exception')),  # Sentry
 ]
 
 if settings.DEBUG:

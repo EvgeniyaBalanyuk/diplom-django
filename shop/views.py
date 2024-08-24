@@ -1,6 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Category, Product
 from cart.forms import CartAddProductForm
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import sentry_sdk  # Импортируем SDK Sentry
 
 
 def product_list(request, category_slug=None):
@@ -32,6 +36,13 @@ def product_detail(request, id, slug): # id и slug для извлечения 
                    'cart_product_form': cart_product_form})
 
 
-
-
-
+# Вызов Sentry Exception
+class SentryTestExceptionView(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            # Искусственно создаём исключение
+            1 / 0
+        except ZeroDivisionError as e:
+            # Логируем исключение в Sentry
+            sentry_sdk.capture_exception(e)
+            return Response({"message": "Exception sent to Sentry."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
