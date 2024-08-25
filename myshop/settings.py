@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "drf_spectacular",  # Автогенерация документации Open API
     "social_django",  # Авторизация с социальной сетью
     "imagekit",  # Создание миниатюр картинок
+    "cacheops",  # Кэширование запросов к БД
     "shop",  # Основное приложение магазина
     "cart",  # Приложение для покупательской корзины
     "orders",  # Приложение для оформления заказа
@@ -169,3 +170,36 @@ sentry_sdk.init(
     traces_sample_rate=1.0,  # Настройка уровня выборки событий для производительности (по умолчанию 1.0)
     send_default_pii=True    # Опционально: отправлять личную идентифицируемую информацию (PII)
 )
+
+# Конфигурация для Redis
+# Настройки кэша
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # URL и порт сервера Redis
+    }
+}
+
+
+# Настройки Cacheops
+CACHEOPS_REDIS = {
+    'host': 'localhost',  # Адрес Redis сервера
+    'port': 6379,         # Порт Redis
+    'db': 1,              # Номер базы данных Redis
+    'socket_timeout': 3,  # Таймаут соединения
+}
+
+
+# Настройки Cacheops
+CACHEOPS = {
+    'default': {
+        'timeout': 60 * 15,  # Время кэширования в секундах (15 минут)
+        'ops': {
+            'all': True,
+        },
+    },
+    'shop.Category': {'ops': 'all', 'timeout': 60 * 15},
+    'shop.Product': {'ops': 'all', 'timeout': 60 * 15},
+    'orders.Order': {'ops': 'all', 'timeout': 60 * 15},
+    'orders.OrderItem': {'ops': 'all', 'timeout': 60 * 15},
+}
